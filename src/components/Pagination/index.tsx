@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Stack, Box, Text } from '@chakra-ui/react';
 import { PaginationItem } from './PaginationItem';
 
@@ -16,7 +17,7 @@ function generatePagesArray(from: number, to: number) {
     .filter(page => page > 0);
 }
 
-export function Pagination({
+function PaginationComponent({
   totalCountOfRegisters,
   registersPerPage = 10,
   currentPage = 1,
@@ -102,3 +103,6 @@ export function Pagination({
     </Stack>
   );
 }
+export const Pagination = memo(PaginationComponent, (prevProps, nextProps) => {
+  return Object.is(prevProps, nextProps);
+});

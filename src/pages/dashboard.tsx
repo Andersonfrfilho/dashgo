@@ -1,4 +1,5 @@
 import { Box, Flex, SimpleGrid, Text, theme } from '@chakra-ui/react';
+import { ApexOptions } from 'apexcharts';
 import dynamic from 'next/dynamic';
 import { parseCookies } from 'nookies';
 import { useContext, useEffect } from 'react';
@@ -14,42 +15,27 @@ import { withSSRAuth } from '../utils/withSSRAuth';
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
-const options = {
-  cart: {
-    toolbar: {
-      show: false,
-    },
-    zoom: {
-      enabled: false,
-    },
-    foreColor: theme.colors.gray[500],
+
+const options: ApexOptions = {
+  chart: {
+    toolbar: { show: false },
+    zoom: { enabled: false },
+    foreColor: theme.colors.gray['500'],
   },
-  grid: {
-    show: false,
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  tooltip: {
-    enabled: false,
-  },
+  grid: { show: false },
+  dataLabels: { enabled: false },
+  tooltip: { enabled: false },
   xaxis: {
     type: 'datetime',
-    axisBorder: {
-      color: theme.colors.gray[600],
-    },
-    axisTicks: {
-      color: theme.colors.gray[600],
-    },
+    axisBorder: { color: theme.colors.gray['600'] },
+    axisTicks: { color: theme.colors.gray['600'] },
     categories: [
-      '2021-03-18T00:00:00.000Z',
-      '2021-03-19T00:00:00.000Z',
-      '2021-03-20T00:00:00.000Z',
-      '2021-03-21T00:00:00.000Z',
-      '2021-03-22T00:00:00.000Z',
-      '2021-03-23T00:00:00.000Z',
-      '2021-03-24T00:00:00.000Z',
-      '2021-03-25T00:00:00.000Z',
+      '2021-04-02T00:00:00:00.000Z',
+      '2021-04-03T00:00:00:00.000Z',
+      '2021-04-04T00:00:00:00.000Z',
+      '2021-04-05T00:00:00:00.000Z',
+      '2021-04-06T00:00:00:00.000Z',
+      '2021-04-07T00:00:00:00.000Z',
     ],
   },
   fill: {
@@ -62,7 +48,8 @@ const options = {
     },
   },
 };
-const series = [{ name: 'series1', data: [31, 120, 10, 28, 61, 18, 109] }];
+
+const series = [{ name: 'series1', data: [57, 36, 13, 29, 6, 19] }];
 
 export default function Dashboard() {
   const { user, isAuthenticated, signOut } = useContext(AuthContext);

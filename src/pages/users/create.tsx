@@ -17,8 +17,8 @@ import { useRouter } from 'next/router';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Form/Input';
 import { Sidebar } from '../../components/Sidebar';
-import { api } from '../../services/api';
 import { queryClient } from '../../services/queryClient';
+import { api } from '../../services/apiClient';
 
 type CreateUserFormData = {
   name: string;

@@ -1,8 +1,8 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Stack, Box, Text } from '@chakra-ui/react';
 import { PaginationItem } from './PaginationItem';
 
-type PaginationProps = {
+export type PaginationProps = {
   totalCountOfRegisters: number;
   registersPerPage?: number;
   currentPage?: number;
@@ -23,20 +23,47 @@ function PaginationComponent({
   currentPage = 1,
   onPageChange,
 }: PaginationProps) {
-  const lastPage = Math.floor(totalCountOfRegisters / registersPerPage);
+  // useMemo
+  /**
+   * 1. Calculo pesados
+   * 2. Igualdade referencial
+   */
+  const { lastPage, nextPages, previousPages } = useMemo(
+    () => ({
+      lastPage: Math.floor(totalCountOfRegisters / registersPerPage),
+      previousPages:
+        currentPage > 1
+          ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
+          : [],
+      nextPages:
+        currentPage < lastPage
+          ? generatePagesArray(
+              currentPage,
+              Math.min(currentPage + siblingsCount, lastPage)
+            )
+          : [],
+    }),
+    [totalCountOfRegisters, registersPerPage, currentPage, onPageChange]
+  );
 
-  const previousPages =
-    currentPage > 1
-      ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
-      : [];
+  // const previousPages = useMemo(
+  //   () =>
+  //     currentPage > 1
+  //       ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
+  //       : [],
+  //   [currentPage, siblingsCount]
+  // );
 
-  const nextPages =
-    currentPage < lastPage
-      ? generatePagesArray(
-          currentPage,
-          Math.min(currentPage + siblingsCount, lastPage)
-        )
-      : [];
+  // const nextPages = useMemo(
+  //   () =>
+  //     currentPage < lastPage
+  //       ? generatePagesArray(
+  //           currentPage,
+  //           Math.min(currentPage + siblingsCount, lastPage)
+  //         )
+  //       : [],
+  //   [lastPage]
+  // );
 
   return (
     <Stack
@@ -103,6 +130,13 @@ function PaginationComponent({
     </Stack>
   );
 }
+// Memo
+/**
+ * 1. Pure Functional components
+ * 2. Renders too often
+ * 3. Re-renders with same props
+ * 4. Medium to big size
+ */
 export const Pagination = memo(PaginationComponent, (prevProps, nextProps) => {
   return Object.is(prevProps, nextProps);
 });

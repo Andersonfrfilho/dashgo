@@ -21,13 +21,24 @@ import NextLink from 'next/link';
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { Header } from '../../components/Header';
-import { Pagination } from '../../components/Pagination';
+import { Pagination, PaginationProps } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
 import { getUsers, useUsers } from '../../services/hooks/useUsers';
 import { queryClient } from '../../services/queryClient';
-import { api } from '../../services/api';
+import { api } from '../../services/apiClient';
 
-export default function UserList({ users }) {
+// example the dynamic itens
+// const AddProductToWishList = dynamic<PaginationProps>(
+//   () => {
+//     return import('../../components/Pagination').then(mod => mod.Pagination);
+//   },
+//   {
+//     loading: () => <span>Carregando</span>,
+//   }
+// );
+// <AddProductToWishList />;
+
+export default function UserList({ users, totalCount }) {
   const [page, setPage] = useState(1);
   const { data, isLoading, isFetching, error } = useUsers(page, {
     initialData: users,
@@ -108,7 +119,7 @@ export default function UserList({ users }) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.users.map(user => {
+                  {users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td paddingX={['4', '4', '6']}>
@@ -149,7 +160,7 @@ export default function UserList({ users }) {
                 </Tbody>
               </Table>
               <Pagination
-                totalCountOfRegisters={data.totalCount}
+                totalCountOfRegisters={totalCount}
                 currentPage={page}
                 onPageChange={setPage}
               />
@@ -162,8 +173,8 @@ export default function UserList({ users }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { users, totalCount } = getUsers(1);
+  const { users, totalCount } = await getUsers(1);
   return {
-    props: { users },
+    props: { users, totalCount },
   };
 };
